@@ -19,7 +19,8 @@
     <router-view />
   </div>
 </template>
-<script setup lang="ts">import { User } from '@prisma/client';
+<script setup lang="ts">
+import { User } from "@prisma/client";
 
 useHead({
   title: "Poemas",
@@ -43,8 +44,9 @@ function logout() {
   useState("user").value = useCookie("user").value;
 
   refreshNuxtData();
-  useRouter().push("/").then(() => window.location.reload());
-  
+  useRouter()
+    .push("/")
+    .then(() => window.location.reload());
 }
 </script>
 <style>

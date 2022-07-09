@@ -6,7 +6,7 @@
     <h1>Index</h1>
     <div>{{ count }} <button @click="count++">+</button></div>
     <p v-if="$isLoggedin()">localUser: {{ localUser.email }}</p>
-    
+
     <div v-if="otherUsers != null && otherUsers.length != 0">
       <p>OtherUsers:</p>
       <ul>
@@ -26,7 +26,7 @@ const { $isLoggedin } = useNuxtApp();
 //#region atributos
 let count = ref(0);
 let localUser = ref(getLocalUser() as { email: string; password: string });
-let otherUsers = ref([] as { name: string, userId: number }[])
+let otherUsers = ref([] as { name: string; userId: number }[]);
 let fetching = ref(false);
 //#endregion
 
