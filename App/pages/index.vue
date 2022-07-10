@@ -3,46 +3,41 @@
     <p>Loading...</p>
   </div>
   <div v-else id="IndexView">
-    <h1>Index</h1>
-    <div>{{ count }} <button @click="count++">+</button></div>
-    <p v-if="$isLoggedin()">localUser: {{ localUser.email }}</p>
-
-    <div v-if="otherUsers != null && otherUsers.length != 0">
-      <p>OtherUsers:</p>
-      <ul>
-        <li v-for="user in otherUsers">
-          {{ user.name }}
-        </li>
-      </ul>
+    <div>
+      <div>
+        <h1>Index</h1>
+        <p v-if="$isLoggedin()">localUser: {{ localUser.email }}</p>
+      </div>
+      <div>
+        <NuxtLink to="/poema/create">Create Poema</NuxtLink>
+      </div>
     </div>
-    <p v-else>No other users</p>
+    <div v-if="poemas != null && poemas.length != 0">
+      <p>Poemas:</p>
+      <PoemaPortred v-for="poema in poemas" :poema="poema" />
+    </div>
+    <p v-else>No Poemas</p>
   </div>
 </template>
 <script setup lang="ts">
-//#region imports
+import { Poema } from "@prisma/client";
+import PoemaPortred from "~~/components/PoemaPortred.vue";
 const { $isLoggedin } = useNuxtApp();
-//#endregion
 
-//#region atributos
 let count = ref(0);
 let localUser = ref(getLocalUser() as { email: string; password: string });
-let otherUsers = ref([] as { name: string; userId: number }[]);
+let poemas = ref([] as Poema[]);
 let fetching = ref(false);
-//#endregion
 
-//#region setup
 try {
   fetching.value = true;
-  otherUsers = await useFetch("/api/users/getAllUserNames").data;
+  poemas = await useFetch("/api/poemas/getAllPoemas").data;
   fetching.value = false;
 } catch (e) {
   alert(e);
 }
-//#endregion
 
-//#region metodos
 function getLocalUser() {
   return useState("user").value as { email: string; password: string };
 }
-//#endregion
 </script>

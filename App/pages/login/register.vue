@@ -19,7 +19,7 @@
 </template>
 <script setup lang="ts">
 definePageMeta({
-  middleware: ["is-register-or-login"],
+  middleware: ["is-loggedin-in-login-register"],
 });
 let fetching = ref(false);
 let error = ref("");

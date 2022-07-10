@@ -14,7 +14,7 @@
 import { User } from "@prisma/client";
 
 definePageMeta({
-  middleware: ["is-register-or-login"],
+  middleware: ["is-loggedin-in-login-register"],
 });
 
 let fetching = ref(false);
@@ -30,34 +30,34 @@ async function submit() {
     error.value = "Preencha todos os campos";
     fetching.value = false;
     return;
-  } else {
-    try {
-      useFetch("/api/users/loginRegister/postLoginData", {
-        method: "POST",
-        body: {
-          email: email.value,
-          password: password.value,
-        },
-      }).then((res) => {
-        useCookie("user").value = JSON.stringify(res.data.value as User);
-        useState("user").value = useCookie("user").value;
-        fetching.value = false;
+  }
 
-        refreshNuxtData();
-        useRouter()
-          .push("/")
-          .then(() => {
-            window.location.reload();
-          });
-      });
+  try {
+    useFetch("/api/users/loginRegister/postLoginData", {
+      method: "POST",
+      body: {
+        email: email.value,
+        password: password.value,
+      },
+    }).then((res) => {
+      useCookie("user").value = JSON.stringify(res.data.value as User);
+      useState("user").value = useCookie("user").value;
+      fetching.value = false;
 
-      fetching.value = false;
-    } catch (e) {
-      error.value = "Email ou senha incorretos";
-      fetching.value = false;
-    }
+      refreshNuxtData();
+      useRouter()
+        .push("/")
+        .then(() => {
+          window.location.reload();
+        });
+    });
+
+    fetching.value = false;
+  } catch (e) {
+    error.value = "Email ou senha incorretos";
     fetching.value = false;
   }
+  fetching.value = false;
 }
 
 /* 
